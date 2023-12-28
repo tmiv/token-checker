@@ -27,7 +27,6 @@ func keyfunc(tok *jwt.Token) (interface{}, error) {
 	}
 	var rawkey interface{}
 	err := key.Raw(&rawkey)
-	log.Printf("Key %+v", key)
 	if err != nil {
 		return nil, fmt.Errorf("token key with id %s key error %v", kid, err)
 	}
