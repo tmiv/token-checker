@@ -46,7 +46,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tokenstring := auth[7:]
-	token, err := jwt.Parse(tokenstring, keyfunc)
+	token, err := jwt.Parse(tokenstring, keyfunc, jwt.WithIssuedAt(), jwt.WithExpirationRequired())
 	if err != nil {
 		log.Printf("Failed to parse the JWT. %v", err)
 		w.WriteHeader(http.StatusBadRequest)
