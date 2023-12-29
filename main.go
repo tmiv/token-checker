@@ -34,6 +34,9 @@ func keyfunc(tok *jwt.Token) (interface{}, error) {
 }
 
 func validate(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		return
+	}
 	if r.Method != http.MethodGet {
 		log.Printf("Bad Method")
 		w.WriteHeader(http.StatusBadRequest)
