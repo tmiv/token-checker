@@ -65,7 +65,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 func setupcors() *cors.Cors {
 	originsenv := os.Getenv("CORS_ORIGINS")
 	if len(originsenv) > 0 {
-		origins := strings.Split(originsenv, "'")
+		origins := strings.Split(originsenv, ",")
 		options := cors.Options{
 			AllowedOrigins:   origins,
 			AllowedMethods:   []string{http.MethodGet},
