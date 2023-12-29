@@ -34,9 +34,6 @@ func keyfunc(tok *jwt.Token) (interface{}, error) {
 }
 
 func validate(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodOptions {
-		return
-	}
 	if r.Method != http.MethodGet {
 		log.Printf("Bad Method")
 		w.WriteHeader(http.StatusBadRequest)
@@ -62,6 +59,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("Validated Token\n")
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func setupcors() *cors.Cors {
@@ -72,6 +70,7 @@ func setupcors() *cors.Cors {
 			AllowedOrigins:   origins,
 			AllowedMethods:   []string{http.MethodGet},
 			AllowCredentials: true,
+			AllowedHeaders:   []string{"authorization"},
 		}
 		return cors.New(options)
 	} else {
