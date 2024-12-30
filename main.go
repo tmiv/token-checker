@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -58,8 +59,21 @@ func validate(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	log.Printf("Validated Token\n")
-	w.WriteHeader(http.StatusNoContent)
+	// Set JSON content type header
+	w.Header().Set("Content-Type", "application/json")
+
+	// Return the claims (payload) as JSON
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		if err := json.NewEncoder(w).Encode(claims); err != nil {
+			log.Printf("Error encoding claims: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	} else {
+		log.Printf("Invalid claims format")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func setupcors() *cors.Cors {
